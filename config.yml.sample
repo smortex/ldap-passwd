@@ -1,0 +1,38 @@
+development:
+  ldap:
+    host: 127.0.0.1
+  dictionary: /dev/null
+
+  required_password_entropy: 18.5
+
+  # If you don't have Internet access in development
+  skip_skip_check_otp: true
+  #yubico_api_id: 42
+  #yubico_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+  # If you don't have Internet access in development
+  skip_send_sms: true 
+  #sms_user: 42
+  #sms_pass: XXXXXXXXXXXXXX
+
+test:
+  ldap:
+    host: 127.0.0.1
+  dictionary: /dev/null
+  required_password_entropy: 18.5
+  yubico_api_id: 42
+  yubico_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  sms_user: 42
+  sms_pass: XXXXXXXXXXXXXX
+
+production:
+  ldap:
+    host: ldap.example.com
+    port: 636
+    encryption: :simple_tls
+  dictionary: /etc/dictionaries-common/words
+  required_password_entropy: 18.5
+  yubico_api_id: 42
+  yubico_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  sms_user: 42
+  sms_pass: XXXXXXXXXXXXXX

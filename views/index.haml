@@ -1,0 +1,127 @@
+!!!
+%html
+  %head
+    %meta{ charset: 'utf-8' }
+    %meta{ http_equiv: 'X-UA-Compatible', content: 'IE=edge' }
+    %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    %title Changer de mot de passe
+    %link{ rel: 'stylesheet', href: '/css/bootstrap.min.css' }
+    %style
+      html, footer { background-color: whitesmoke; }
+      footer { padding: 20px 0 40px 0; border-top: 1px solid #ccc; color: #888; }
+      body { background-color: #fff; }
+    %script{ src: '/js/jquery.min.js' }
+    %script{ src: '/js/bootstrap.min.js' }
+  %body
+    .container
+      .page-header
+        %h1 Changer de mot de passe
+      - if @notice
+        .alert.alert-success
+          %h4 Mot de passe changé avec succès
+          = @notice
+      - if @alert
+        .alert.alert-danger
+          %h4 Votre mot de passe n'a pas été changé
+          = @alert
+    .container
+      .row
+        .col-md-6
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title Comment choisir un mot de passe ?
+            .panel-body
+              - pw1_chars = 70
+              - pw1_length = 8
+              %p Si on considère un alphabet de #{pw1_chars} caractères disponibles (26 majuscules, 26 minuscules, 10 chiffres et 8 signes de ponctuation) et un mot de passe de composé de 8 de ces caractères, on obtient #{pw1_chars}<sup>#{pw1_length}</sup> = #{ pw1_chars ** pw1_length } mots de passe possibles.
+              - pw2_chars = 26
+              - pw2_length = 11
+              %p Si on réduit l'alphabet aux seules minuscules (#{pw2_chars} caractères, -#{100 - pw2_chars * 100 / pw1_chars}%) mais qu'on ajoute #{pw2_length - pw1_length} caractères (+#{pw2_length * 100 / pw1_length - 100}%), on obtient #{pw2_chars}<sup>#{pw2_length}</sup> = #{ pw2_chars ** pw2_length } mots de passe possibles, soit  #{ "%.2f" % [ (pw2_chars.to_f ** pw2_length) / (pw1_chars ** pw1_length) ] } fois plus.
+              %p Un risque est que ce nouveau mot de passe soit un mot du dictionnaire (ou dérivé d'un mot du dictionnaire, comme <q>zyg0m4t1qu3</q>). On calcule donc l'<em>entropie</em> du mot de passe qui doit être suppérieure à <strong>#{$config[:required_password_entropy]}</strong> (l'entropie augmente avec chaque caractère, mais diminue lorsque des répétitions, des séquences ou des mots du dictionnaire sont détectées). Exemples :
+              %table.table
+                %thead
+                  %tr
+                    %th Mot de passe
+                    %th.text-right Entropie
+                %tbody
+                  %tr.danger
+                    %td toto
+                    %td.text-right 2.00
+                  %tr.danger
+                    %td zyg0m4t1qu3
+                    %td.text-right 2.00
+                  %tr.danger
+                    %td azerty1234
+                    %td.text-right 8.00
+                  %tr.danger
+                    %td M?}];qcxK
+                    %td.text-right 17.50
+              - pw3_chars = 140000
+              - pw3_length = 4
+              %p Il est par contre possible de combiner plusieurs mots du dictionnaire.  Si on considère une langue comme le français qui a environ #{pw3_chars} mots, et qu'on choisi #{pw3_length} de ces mots, on obtient un mot de passe parmi les #{pw3_chars}<sup>#{pw3_length}</sup> = #{pw3_chars ** pw3_length} possibles (encore #{"%.2f" % [ (pw3_chars.to_f ** pw3_length) / (pw2_chars ** pw2_length) ]} fois plus de possibilités qu'avec l'exemple précédent). L'entropie ainsi obtenue est excelente :
+              %table.table
+                %thead
+                  %tr
+                    %th Mot de passe
+                    %th.text-right Entropie
+                %tbody
+                  %tr.success
+                    %td attendront parraineraient débarrassèrent obscurciras
+                    %td.text-right 48.26
+              %p Plus généralement, une phrase donne de bons résultats :
+              %table.table
+                %thead
+                  %tr
+                    %th Mot de passe
+                    %th.text-right Entropie
+                %tbody
+                  %tr.success
+                    %td je m'apelle vanessa et j'aime le chocolat
+                    %td.text-right 43.69
+                  %tr.success
+                    %td tant va la cruche à l'eau qu'à la fin elle fait le moine
+                    %td.text-right 49.93
+              %p En bref, ne pensez pas <q><em>mot</em> de passe</q>, pensez <q><em>phrase</em> de passe</q>.
+        .col-md-6
+          .panel.panel-primary
+            .panel-heading
+              %h4.panel-title Changer de mot de passe
+            .panel-body
+              %form{ method: :post, url: url('/') }
+                .form-group
+                  %label.control-label{ for: 'uid' }
+                    Nom d'utilisateur :
+                  %input#uid{ name: 'uid', class: 'form-control', value: params['uid'], xplaceholder: 'f.bardamu' }
+                  .help-block Ce qui se trouve avant <q>@example.com</q> dans votre adresse de messagerie.
+                .form-group
+                  %label.control-label{ for: 'current_password' }
+                    Mot de passe actuel :
+                  %input#current_password{ name: 'current_password', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe + OTP #1' }
+                  .help-block Suivi d'un mot de passe à usage unique (OTP) de votre YubiKey.
+                .form-group
+                  %label.control-label{ for: 'password' }
+                    Nouveau mot de passe :
+                  %input#password{ name: 'password', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe + OTP #2' }
+                  .help-block Suivi d'un mot de passe à usage unique (OTP) de votre YubiKey.
+                .form-group
+                  %label.control-label{ for: 'password_confirmation' }
+                    Confirmation du nouveau mot de passe :
+                  %input#password_confirmation{ name: 'password_confirmation', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe + OTP #3' }
+                  .help-block Suivi d'un mot de passe à usage unique (OTP) de votre YubiKey.
+                .text-center
+                  %button#submit{ type: 'submit', class: 'btn btn-primary', data: { loading_text: 'Veuillez patienter…' } } Changer de mot de passe
+    :coffee
+      jQuery ->
+        $('form').on 'submit', ->
+          res = true
+          $(this).find('input').each (index, element, array) ->
+            #alert('loop e = ' + element + " in = " + index + " arra = " + array)
+            if res && $(element).val() == ''
+              res = false
+              element.focus()
+          if res
+            $('#submit').button('loading')
+          res
+    %footer
+      .container
+        Copyright © 2014 Romain Tartière
