@@ -52,7 +52,7 @@ class Application < Sinatra::Base
 
       users = ldap.search(:scope => Net::LDAP::SearchScope_BaseObject)
       if users.nil? || users.count != 1 then
-        raise "Échec d'authentification."
+        raise "Votre nom d'utilisateur ou votre mot de passe actuel est erroné."
       end
 
       user = users.first
