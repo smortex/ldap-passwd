@@ -32,7 +32,7 @@ class Application < Sinatra::Base
         raise "Le nouveau mot de passe n'a pas assez d'entropie (il a #{@password.entropy} bits d'entropie, alors qu'il en faut plus que #{$config[:required_password_entropy]})."
       end
 
-      user_dn = "uid=#{params[:uid]},ou=people,dc=example,dc=com"
+      user_dn = format($config[:user_dn], params[:uid])
       ldap = Net::LDAP.new($config[:ldap].merge({
         :base => user_dn,
         :auth => {

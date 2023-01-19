@@ -107,7 +107,10 @@
                   %label.control-label{ for: 'uid' }
                     Nom d'utilisateur :
                   %input#uid{ name: 'uid', class: 'form-control', value: params['uid'], xplaceholder: 'f.bardamu' }
-                  .help-block Ce qui se trouve avant <q>@example.com</q> dans votre adresse de messagerie.
+                  .help-block
+                    Ce qui se trouve avant
+                    %q= $config[:domain]
+                    dans votre adresse de messagerie.
                 .form-group
                   %label.control-label{ for: 'current_password' }
                     Mot de passe actuel :

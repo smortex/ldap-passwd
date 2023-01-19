@@ -1,20 +1,25 @@
 development:
+  domain: example.com
+  user_dn: "uid=%s,ou=people,dc=example,dc=com"
   ldap:
     host: 127.0.0.1
   dictionary: /dev/null
-
   required_password_entropy: 18.5
 
 test:
+  domain: example.com
+  user_dn: "uid=%s,ou=people,dc=example,dc=com"
   ldap:
     host: 127.0.0.1
   dictionary: /dev/null
   required_password_entropy: 18.5
 
 production:
+  domain: example.com
+  user_dn: "uid=%s,ou=people,dc=example,dc=com"
   ldap:
     host: ldap.example.com
-    port: 636
-    encryption: :simple_tls
+    port: 389
+    encryption: :start_tls
   dictionary: /etc/dictionaries-common/words
   required_password_entropy: 18.5
