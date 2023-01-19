@@ -24,14 +24,6 @@ class Application < Sinatra::Base
       @password              = Secret.new(params[:password])
       @password_confirmation = Secret.new(params[:password_confirmation])
 
-      if @current_password.otp.nil?  || @password.otp.nil?  || @password_confirmation.otp.nil? then
-        raise "Au moins un des mot de passe n'était pas suivi d'un OTP valide." 
-      end
-
-      if @current_password.public_id != @password.public_id || @password.public_id != @password_confirmation.public_id then
-        raise 'Les OTP ne proviennent pas tous de la même YubiKey.'
-      end
-
       if @password != @password_confirmation then
         raise 'Le nouveau mot de passe et sa confirmation ne concordent pas.'
       end
@@ -56,10 +48,6 @@ class Application < Sinatra::Base
       end
 
       user = users.first
-
-      if ! user.yubiKeyId.include?(@password.public_id) then
-        raise "Veuillez utiliser votre YubiKey."
-      end
 
       if ! ldap.replace_attribute(user_dn, :userPassword, Net::LDAP::Password.generate(:ssha, @password.password)) then
         raise "Erreur lors de la mise à jour de l'entrée de l'annuaire."
