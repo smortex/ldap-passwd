@@ -1,0 +1,69 @@
+---
+
+variables:
+  URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_SHA}/artifact.tar.gz"
+
+default:
+  image: registry.vittoria.pro/image-builder/debian-bullseye-rails:vittoria-debian-bullseye-rails
+
+bundle:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  interruptible: true
+  cache:
+    - key:
+        files:
+          - Gemfile.lock
+      paths:
+        - vendor/
+  script:
+    - bundle config set deployment 'true'
+    - bundle install
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - .bundle/
+      - vendor/
+
+bundle-audit:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  interruptible: true
+  script:
+    - gem install bundler-audit
+    - bundle-audit
+
+rubocop:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+  interruptible: true
+  needs:
+    - bundle
+  script:
+    - bundle exec rubocop
+
+build artifact:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  interruptible: true
+  needs:
+    - bundle
+  script:
+    - bundle config set without 'development test'
+    - bundle install
+    - bundle clean
+    - tar zcf /tmp/artifact.tar.gz --exclude .git --exclude log --exclude tmp .
+    - 'curl --fail --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file /tmp/artifact.tar.gz "${URL}"'
+
+deploy:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  needs:
+    - build artifact
+  image:
+    name: registry.vittoria.pro/image-builder/mco
+  script: 'mco tasks run application::deploy --application=ldap-passwd --environment=production --url="${URL}" --deployment_name="${CI_COMMIT_SHA}" --header="{\"JOB-TOKEN\": \"${CI_JOB_TOKEN}\"}" -C profile::ldappasswd'
+  environment:
+    name: production
+    url: https://ldap-passwd.vittoria.pro/

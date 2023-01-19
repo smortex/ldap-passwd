@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra/base'
 require 'haml'
 require 'coffee_script'
@@ -9,7 +11,7 @@ class PasswordChecker
   include Singleton
 
   def checker
-    @checker ||= StrongPassword::StrengthChecker.new(use_dictionary: true, extra_dictionary_words: File.readlines($config[:dictionary], encoding: 'utf-8').map { |x| x.chomp })
+    @checker ||= StrongPassword::StrengthChecker.new(use_dictionary: true, extra_dictionary_words: File.readlines($config[:dictionary], encoding: 'utf-8').map(&:chomp))
   end
 
   def calculate_entropy(password)
@@ -37,39 +39,30 @@ class Application < Sinatra::Base
       @password              = Secret.new(params[:password])
       @password_confirmation = Secret.new(params[:password_confirmation])
 
-      if @password != @password_confirmation then
-        raise(ApplicationException, 'Le nouveau mot de passe et sa confirmation ne concordent pas.')
-      end
+      raise(ApplicationException, 'Le nouveau mot de passe et sa confirmation ne concordent pas.') if @password != @password_confirmation
 
-      if @password.entropy <= $config[:required_password_entropy] then
-        raise(ApplicationException, "Le nouveau mot de passe n'a pas assez d'entropie (il a #{@password.entropy} bits d'entropie, alors qu'il en faut plus que #{$config[:required_password_entropy]}).")
-      end
+      raise(ApplicationException, "Le nouveau mot de passe n'a pas assez d'entropie (il a #{@password.entropy} bits d'entropie, alors qu'il en faut plus que #{$config[:required_password_entropy]}).") if @password.entropy <= $config[:required_password_entropy]
 
       user_dn = format($config[:user_dn], params[:uid])
       ldap = Net::LDAP.new($config[:ldap].merge({
-        :base => user_dn,
-        :auth => {
-            :method => :simple,
-          :username => user_dn,
-          :password => @current_password.password,
-        }
-      }))
+                                                  base: user_dn,
+                                                  auth: {
+                                                    method: :simple,
+                                                    username: user_dn,
+                                                    password: @current_password.password
+                                                  }
+                                                }))
 
-      users = ldap.search(:scope => Net::LDAP::SearchScope_BaseObject)
-      if users.nil? || users.count != 1 then
-        raise(ApplicationException, "Votre nom d'utilisateur ou votre mot de passe actuel est erroné.")
-      end
+      users = ldap.search(scope: Net::LDAP::SearchScope_BaseObject)
+      raise(ApplicationException, "Votre nom d'utilisateur ou votre mot de passe actuel est erroné.") if users.nil? || users.count != 1
 
-      user = users.first
-
-      if ! ldap.replace_attribute(user_dn, :userPassword, Net::LDAP::Password.generate(:ssha, @password.password)) then
-        raise(ApplicationException, "Erreur lors de la mise à jour de l'entrée de l'annuaire.")
-      end
+      raise(ApplicationException, "Erreur lors de la mise à jour de l'entrée de l'annuaire.") if !ldap.replace_attribute(user_dn, :userPassword, Net::LDAP::Password.generate(:ssha, @password.password))
 
       @notice = "Entropie du nouveau mot de passe : #{@password.entropy}."
       logger.info("New password set for #{user_dn} (entropy: #{@password.entropy})")
     rescue ApplicationException => e
       @alert = e.message
+      logger.error(e.message)
     end
     haml :index
   end

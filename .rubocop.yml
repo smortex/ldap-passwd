@@ -1,0 +1,11 @@
+Layout/LineLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
