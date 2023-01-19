@@ -1,5 +1,4 @@
 require 'active_model'
-require 'strong_password'
 
 class Secret
   attr_reader :password
@@ -14,7 +13,6 @@ class Secret
   end
 
   def entropy
-    @checker ||= StrongPassword::StrengthChecker.new(@password)
-    @entropy ||= @checker.calculate_entropy(use_dictionary: true, extra_dictionary_words: File.readlines($config[:dictionary], encoding: 'utf-8').map { |x| x.chomp })
+    PasswordChecker.instance.calculate_entropy(@password)
   end
 end

@@ -44,22 +44,17 @@
                     %th Mot de passe
                     %th.text-right Entropie
                 %tbody
-                  %tr
-                    %td
-                      %code toto
-                    %td.text-right.text-danger 2.00
-                  %tr
-                    %td
-                      %code M?}];qcxK
-                    %td.text-right.text-danger 17.50
-                  %tr
-                    %td
-                      %code BUH2(kF`}w
-                    %td.text-right.text-success 19.00
-                  %tr
-                    %td
-                      %code zyg0m4t1qu3
-                    %td.text-right.text-danger 2.00
+                  - ['toto', 'M?}];qcxK', 'BUH2(kF`}w', 'zyg0m4t1qu3'].each do |password|
+                    %tr
+                      %td
+                        %code= password
+                      - entropy = Secret.new(password).entropy
+                      - if entropy > $config[:required_password_entropy]
+                        %td.text-right.text-success
+                          = format('%.2f', entropy)
+                      - else
+                        %td.text-right.text-danger
+                          = format('%.2f', entropy)
               - pw3_chars = 140000
               - pw3_length = 4
               %p Il est par contre possible de combiner plusieurs mots du dictionnaire.  Si on considère une langue comme le français qui a environ #{pw3_chars} mots, et qu'on choisi #{pw3_length} de ces mots, on obtient un mot de passe parmi les #{pw3_chars}<sup>#{pw3_length}</sup> = #{pw3_chars ** pw3_length} possibles (encore #{"%.2f" % [ (pw3_chars.to_f ** pw3_length) / (pw2_chars ** pw2_length) ]} fois plus de possibilités qu'avec l'exemple précédent). L'entropie ainsi obtenue est excellente :
@@ -69,18 +64,17 @@
                     %th Mot de passe
                     %th.text-right Entropie
                 %tbody
-                  %tr
-                    %td
-                      %code engoulevent arrondirent robinetteries tribut
-                    %td.text-right.text-success 40.33
-                  %tr
-                    %td
-                      %code reversant enthousiasmerai sermonnant empaquetons
-                    %td.text-right.text-success 46.82
-                  %tr
-                    %td
-                      %code attendront parraineraient débarrassèrent obscurciras
-                    %td.text-right.text-success 48.26
+                  - ['engoulevent arrondirent robinetteries tribut', 'reversant enthousiasmerai sermonnant empaquetons', 'attendront parraineraient débarrassèrent obscurciras'].each do |password|
+                    %tr
+                      %td
+                        %code= password
+                      - entropy = Secret.new(password).entropy
+                      - if entropy > $config[:required_password_entropy]
+                        %td.text-right.text-success
+                          = format('%.2f', entropy)
+                      - else
+                        %td.text-right.text-danger
+                          = format('%.2f', entropy)
               %p Plus généralement, une phrase donne de bons résultats :
               %table.table.table-striped
                 %thead
@@ -88,14 +82,17 @@
                     %th Mot de passe
                     %th.text-right Entropie
                 %tbody
-                  %tr
-                    %td
-                      %code je m'appelle vanessa et j'aime le chocolat
-                    %td.text-right.text-success 43.69
-                  %tr
-                    %td
-                      %code tant va la cruche à l'eau qu'à la fin elle fait le moine
-                    %td.text-right.text-success 49.93
+                  - ["je m'appelle vanessa et j'aime le chocolat", "tant va la cruche à l'eau qu'à la fin elle fait le moine"].each do |password|
+                    %tr
+                      %td
+                        %code= password
+                      - entropy = Secret.new(password).entropy
+                      - if entropy > $config[:required_password_entropy]
+                        %td.text-right.text-success
+                          = format('%.2f', entropy)
+                      - else
+                        %td.text-right.text-danger
+                          = format('%.2f', entropy)
               %p En bref, ne pensez pas <q><em>mot</em> de passe</q>, pensez <q><em>phrase</em> de passe</q>… et n'utilisez pas ces exemples !
         .col-md-6
           .panel.panel-primary

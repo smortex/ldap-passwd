@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'sinatra', '~> 1.4.5'
-gem 'activemodel', '~> 4.1.4'
+gem 'sinatra', '~> 3.0'
+gem 'activemodel', '~> 7.0'
 gem 'strong_password', '~> 0.0.4'
-gem 'net-ldap', '~> 0.6.1'
-gem 'haml', '~> 4.0.5'
+gem 'net-ldap', '~> 0.17.1'
+gem 'haml', '~> 6.0'
 gem 'coffee-script', '~> 2.3.0'
 
 group :development do
