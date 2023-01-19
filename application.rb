@@ -55,16 +55,6 @@ class Application < Sinatra::Base
 
       @notice = "Entropie du nouveau mot de passe : #{@password.entropy}."
       logger.info("New password set for #{user_dn} (entropy: #{@password.entropy})")
-
-      begin
-        if !$config[:skip_send_sms] then
-          sms = Sms.new
-          sms.message = "#{user.cn.first.force_encoding('UTF-8')} a changé de mot de passe (entropie : #{@current_password.entropy} -> #{@password.entropy})."
-          sms.deliver
-        end
-      rescue Exception => e
-        logger.error(e)
-      end
     rescue Exception => e
       logger.error(e)
       @alert = e.message
