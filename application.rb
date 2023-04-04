@@ -20,10 +20,10 @@ class PasswordChecker
 end
 
 class PasswordChanger
-  attr_reader :user
+  attr_reader :uid
 
-  def initialize(user:, current_password:, password:, password_confirmation:)
-    @user = user
+  def initialize(uid:, current_password:, password:, password_confirmation:)
+    @uid = uid
 
     @current_password      = Secret.new(current_password)
     @password              = Secret.new(password)
@@ -45,7 +45,7 @@ class PasswordChanger
   end
 
   def user_dn
-    @user_dn ||= format($config[:user_dn], user)
+    @user_dn ||= format($config[:user_dn], uid)
   end
 
   def ldap
@@ -77,10 +77,9 @@ class Application < Sinatra::Base
   end
 
   post '/' do
-    $logger ||= logger
-
     begin
-      pc = PasswordChanger.new(user: params[:uid], current_password: params[:current_password], password: params[:password], password_confirmation: params[:password_confirmation])
+      symbolized_params = params.to_h.transform_keys(&:to_sym)
+      pc = PasswordChanger.new(symbolized_params)
       pc.change!
 
       @notice = "Entropie du nouveau mot de passe : #{pc.entropy}."

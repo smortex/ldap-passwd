@@ -103,23 +103,21 @@
                 .form-group
                   %label.control-label{ for: 'uid' }
                     Nom d'utilisateur :
-                  %input#uid{ name: 'uid', class: 'form-control', value: params['uid'], xplaceholder: 'f.bardamu' }
+                  %input#uid{ name: 'uid', class: 'form-control', value: params['uid'] }
                   .help-block
-                    Ce qui se trouve avant
-                    %q= $config[:domain]
-                    dans votre adresse de messagerie.
+                    Généralement votre prénom, en minuscule, sans espace et sans accent.
                 .form-group
                   %label.control-label{ for: 'current_password' }
                     Mot de passe actuel :
-                  %input#current_password{ name: 'current_password', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe' }
+                  %input#current_password{ name: 'current_password', type: 'password', class: 'form-control' }
                 .form-group
                   %label.control-label{ for: 'password' }
                     Nouveau mot de passe :
-                  %input#password{ name: 'password', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe' }
+                  %input#password{ name: 'password', type: 'password', class: 'form-control' }
                 .form-group
                   %label.control-label{ for: 'password_confirmation' }
                     Confirmation du nouveau mot de passe :
-                  %input#password_confirmation{ name: 'password_confirmation', type: 'password', class: 'form-control', xplaceholder: 'Mot de passe' }
+                  %input#password_confirmation{ name: 'password_confirmation', type: 'password', class: 'form-control' }
                 .text-center
                   %button#submit{ type: 'submit', class: 'btn btn-primary', data: { loading_text: 'Veuillez patienter…' } } Changer de mot de passe
     :coffee
