@@ -2,7 +2,6 @@
 
 require 'sinatra/base'
 require 'haml'
-require 'coffee_script'
 require 'net/ldap'
 require 'strong_password'
 require 'singleton'

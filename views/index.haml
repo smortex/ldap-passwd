@@ -120,18 +120,6 @@
                   %input#password_confirmation{ name: 'password_confirmation', type: 'password', class: 'form-control' }
                 .text-center
                   %button#submit{ type: 'submit', class: 'btn btn-primary', data: { loading_text: 'Veuillez patienter…' } } Changer de mot de passe
-    :coffee
-      jQuery ->
-        $('form').on 'submit', ->
-          res = true
-          $(this).find('input').each (index, element, array) ->
-            #alert('loop e = ' + element + " in = " + index + " arra = " + array)
-            if res && $(element).val() == ''
-              res = false
-              element.focus()
-          if res
-            $('#submit').button('loading')
-          res
     %footer
       .container
         Copyright © 2014 Romain Tartière
