@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'active_model'
 
 class Secret
   attr_reader :password
+
   include Comparable
 
   def initialize(password)
