@@ -33,7 +33,7 @@
             .panel-body
               - pw1_chars = 70
               - pw1_length = 8
-              %p Si on considère un alphabet de #{pw1_chars} caractères disponibles (26 majuscules, 26 minuscules, 10 chiffres et 8 signes de ponctuation) et un mot de passe de composé de 8 de ces caractères, on obtient #{pw1_chars}<sup>#{pw1_length}</sup> = #{ pw1_chars ** pw1_length } mots de passe possibles.
+              %p Si on considère un alphabet de #{pw1_chars} caractères disponibles (26 majuscules, 26 minuscules, 10 chiffres et 8 signes de ponctuation) et un mot de passe composé de 8 de ces caractères, on obtient #{pw1_chars}<sup>#{pw1_length}</sup> = #{ pw1_chars ** pw1_length } mots de passe possibles.
               - pw2_chars = 26
               - pw2_length = 11
               %p Si on réduit l'alphabet aux seules minuscules (#{pw2_chars} caractères, -#{100 - pw2_chars * 100 / pw1_chars}%) mais qu'on ajoute #{pw2_length - pw1_length} caractères (+#{pw2_length * 100 / pw1_length - 100}%), on obtient #{pw2_chars}<sup>#{pw2_length}</sup> = #{ pw2_chars ** pw2_length } mots de passe possibles, soit  #{ "%.2f" % [ (pw2_chars.to_f ** pw2_length) / (pw1_chars ** pw1_length) ] } fois plus.
