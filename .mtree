@@ -1,0 +1,7 @@
+/set type=dir uname=deploy gname=deploy mode=0755
+.
+	config.yml type=file uname=user gname=user mode=0400
+	..
+	tmp uname=user gname=user
+	..
+..
