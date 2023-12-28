@@ -27,73 +27,7 @@
     .container
       .row
         .col-md-6
-          .panel.panel-default
-            .panel-heading
-              %h4.panel-title Comment choisir un mot de passe ?
-            .panel-body
-              - pw1_chars = 70
-              - pw1_length = 8
-              %p Si on considère un alphabet de #{pw1_chars} caractères disponibles (26 majuscules, 26 minuscules, 10 chiffres et 8 signes de ponctuation) et un mot de passe composé de 8 de ces caractères, on obtient #{pw1_chars}<sup>#{pw1_length}</sup> = #{ pw1_chars ** pw1_length } mots de passe possibles.
-              - pw2_chars = 26
-              - pw2_length = 11
-              %p Si on réduit l'alphabet aux seules minuscules (#{pw2_chars} caractères, -#{100 - pw2_chars * 100 / pw1_chars}%) mais qu'on ajoute #{pw2_length - pw1_length} caractères (+#{pw2_length * 100 / pw1_length - 100}%), on obtient #{pw2_chars}<sup>#{pw2_length}</sup> = #{ pw2_chars ** pw2_length } mots de passe possibles, soit  #{ "%.2f" % [ (pw2_chars.to_f ** pw2_length) / (pw1_chars ** pw1_length) ] } fois plus.
-              %p Un risque est que ce nouveau mot de passe soit un mot du dictionnaire (ou dérivé d'un mot du dictionnaire, comme <q>zyg0m4t1qu3</q>). On calcule donc l'<em>entropie</em> du mot de passe qui doit être supérieure à <strong>#{$config[:required_password_entropy]}</strong> (sans entrer dans les détails, l'entropie augmente avec chaque caractère, mais diminue lorsque des répétitions, des séquences ou des mots du dictionnaire sont détectées). Exemples :
-              %table.table.table-striped
-                %thead
-                  %tr
-                    %th Mot de passe
-                    %th.text-right Entropie
-                %tbody
-                  - ['toto', 'M?}];qcxK', 'BUH2(kF`}w', 'zyg0m4t1qu3'].each do |password|
-                    %tr
-                      %td
-                        %code= password
-                      - entropy = Secret.new(password).entropy
-                      - if entropy > $config[:required_password_entropy]
-                        %td.text-right.text-success
-                          = format('%.2f', entropy)
-                      - else
-                        %td.text-right.text-danger
-                          = format('%.2f', entropy)
-              - pw3_chars = 140000
-              - pw3_length = 4
-              %p Il est par contre possible de combiner plusieurs mots du dictionnaire.  Si on considère une langue comme le français qui a environ #{pw3_chars} mots, et qu'on choisi #{pw3_length} de ces mots, on obtient un mot de passe parmi les #{pw3_chars}<sup>#{pw3_length}</sup> = #{pw3_chars ** pw3_length} possibles (encore #{"%.2f" % [ (pw3_chars.to_f ** pw3_length) / (pw2_chars ** pw2_length) ]} fois plus de possibilités qu'avec l'exemple précédent). L'entropie ainsi obtenue est excellente :
-              %table.table.table-striped
-                %thead
-                  %tr
-                    %th Mot de passe
-                    %th.text-right Entropie
-                %tbody
-                  - ['engoulevent arrondirent robinetteries tribut', 'reversant enthousiasmerai sermonnant empaquetons', 'attendront parraineraient débarrassèrent obscurciras'].each do |password|
-                    %tr
-                      %td
-                        %code= password
-                      - entropy = Secret.new(password).entropy
-                      - if entropy > $config[:required_password_entropy]
-                        %td.text-right.text-success
-                          = format('%.2f', entropy)
-                      - else
-                        %td.text-right.text-danger
-                          = format('%.2f', entropy)
-              %p Plus généralement, une phrase donne de bons résultats :
-              %table.table.table-striped
-                %thead
-                  %tr
-                    %th Mot de passe
-                    %th.text-right Entropie
-                %tbody
-                  - ["je m'appelle vanessa et j'aime le chocolat", "tant va la cruche à l'eau qu'à la fin elle fait le moine"].each do |password|
-                    %tr
-                      %td
-                        %code= password
-                      - entropy = Secret.new(password).entropy
-                      - if entropy > $config[:required_password_entropy]
-                        %td.text-right.text-success
-                          = format('%.2f', entropy)
-                      - else
-                        %td.text-right.text-danger
-                          = format('%.2f', entropy)
-              %p En bref, ne pensez pas <q><em>mot</em> de passe</q>, pensez <q><em>phrase</em> de passe</q>… et n'utilisez pas ces exemples !
+          != $doc
         .col-md-6
           .panel.panel-primary
             .panel-heading

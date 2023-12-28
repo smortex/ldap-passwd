@@ -71,6 +71,10 @@ class Application < Sinatra::Base
     enable :logging
   end
 
+  before do
+    $doc ||= haml(:doc)
+  end
+
   get '/' do
     haml :index
   end
