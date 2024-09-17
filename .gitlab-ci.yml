@@ -4,7 +4,7 @@ variables:
   URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_SHA}/artifact.tar.gz"
 
 default:
-  image: registry.vittoria.pro/image-builder/debian-bullseye-rails:vittoria-debian-bullseye-rails
+  image: registry.vittoria.pro/image-builder/debian-rails:bookworm
 
 bundle:
   rules:
