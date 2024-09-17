@@ -82,7 +82,7 @@ class Application < Sinatra::Base
   post '/' do
     begin
       symbolized_params = params.to_h.transform_keys(&:to_sym)
-      pc = PasswordChanger.new(symbolized_params)
+      pc = PasswordChanger.new(**symbolized_params)
       pc.change!
 
       @notice = "Entropie du nouveau mot de passe : #{pc.entropy}."
