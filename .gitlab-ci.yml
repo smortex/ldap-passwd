@@ -46,7 +46,7 @@ rubocop:
 
 build artifact:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
   interruptible: true
   needs:
     - bundle
@@ -59,7 +59,7 @@ build artifact:
 
 deploy:
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"
   needs:
     - build artifact
   image:
