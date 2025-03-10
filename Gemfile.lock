@@ -50,6 +50,8 @@ GEM
     rack-session (2.1.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
+    rackup (2.2.1)
+      rack (>= 3)
     rainbow (3.1.1)
     regexp_parser (2.10.0)
     rspec-core (3.13.3)
@@ -93,6 +95,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    webrick (1.9.1)
 
 PLATFORMS
   ruby
@@ -101,12 +104,14 @@ DEPENDENCIES
   activemodel (~> 7.0)
   haml (~> 6.0)
   net-ldap (~> 0.17.1)
+  rackup
   rspec-core
   rspec-expectations
   rspec-mocks
   rubocop
   sinatra (~> 4.0)
   strong_password (~> 0.0.4)
+  webrick
 
 BUNDLED WITH
    2.3.15
