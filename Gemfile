@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'activemodel', '~> 7.0'
+gem 'activemodel', '~> 7.0',  '>= 7.2.3.1'
 gem 'haml', '~> 6.0'
 gem 'net-ldap', '~> 0.17.1'
 gem 'sinatra', '~> 4.0'
