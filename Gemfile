@@ -9,10 +9,10 @@ gem 'sinatra', '~> 4.0'
 gem 'strong_password', '~> 0.0.4'
 
 group :development do
+  gem 'puma'
   gem 'rackup'
   gem 'rspec-core'
   gem 'rspec-expectations'
   gem 'rspec-mocks'
   gem 'rubocop'
-  gem 'webrick'
 end

@@ -36,11 +36,14 @@ GEM
     minitest (5.27.0)
     mustermann (3.1.1)
     net-ldap (0.17.1)
+    nio4r (2.7.5)
     parallel (2.1.0)
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
     prism (1.9.0)
+    puma (8.0.2)
+      nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
     rack-protection (4.2.1)
@@ -95,7 +98,6 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
-    webrick (1.9.2)
 
 PLATFORMS
   ruby
@@ -105,6 +107,7 @@ DEPENDENCIES
   activemodel (~> 7.0, >= 7.2.3.1)
   haml (~> 6.0)
   net-ldap (~> 0.17.1)
+  puma
   rackup
   rspec-core
   rspec-expectations
@@ -112,7 +115,6 @@ DEPENDENCIES
   rubocop
   sinatra (~> 4.0)
   strong_password (~> 0.0.4)
-  webrick
 
 BUNDLED WITH
    2.5.22
