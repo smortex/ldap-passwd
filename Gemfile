@@ -2,9 +2,9 @@
 
 source 'https://rubygems.org'
 
-gem 'activemodel', '~> 7.0', '>= 7.2.3.1'
-gem 'haml', '~> 6.0'
-gem 'net-ldap', '~> 0.17.1'
+gem 'activemodel', '~> 8.1.0'
+gem 'haml', '~> 7.0'
+gem 'net-ldap', '~> 0.20.0'
 gem 'sinatra', '~> 4.0'
 gem 'strong_password', '~> 0.0.4'
 
