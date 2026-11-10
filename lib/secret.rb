@@ -8,7 +8,7 @@ class Secret
   include Comparable
 
   def initialize(password)
-    @password  = password
+    @password = password
   end
 
   def <=>(other)
